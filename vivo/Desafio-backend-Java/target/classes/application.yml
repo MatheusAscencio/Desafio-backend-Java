@@ -1,0 +1,54 @@
+# Server Config
+server:
+    port: 8080
+
+# Application Config
+spring:
+    application:
+        name: ORDERS
+    datasource:
+        username: sa
+        password:
+        driverClassName: org.h2.Driver
+    h2:
+        console:
+            enabled: true
+            path: /h2-console
+            settings:
+                web-allow-others: true
+    jpa:
+        hibernate:
+            ddl-auto: update
+            defer-datasource-initialization: true
+            database-platform: org.hibernate.dialect.H2Dialect
+            properties:
+                hibernate:
+                    show_sql: true
+                    format_sql: true
+    mvc:
+        pathmatch:
+            matching-strategy: ant-path-matcher
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: user
+        password: docker
+
+# Eureka Config
+eureka:
+    client:
+        service-url:
+            defaultZone: http://eureka-server-vivo:abc123@eureka:8761/eureka/
+            instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+
+# Management Config
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+# Message-Queue Config
+mq:
+    queues:
+        cards-issuance: orders-issuance

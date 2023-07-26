@@ -1,0 +1,22 @@
+# Server
+server:
+    port: 8761
+
+# Application
+spring:
+    application:
+        name: eureka-server
+    security:
+        basic:
+            enabled: true
+        user:
+            name: eureka-server-vivo
+            password: abc123
+    main:
+        allow-bean-definition-overriding: true
+
+#Eureka-Server
+eureka:
+    client:
+        register-with-eureka: false
+        fetch-registry: false

@@ -1,0 +1,59 @@
+# Server Config
+server:
+    port: 8765
+
+#Eureka Config
+eureka:
+    client:
+        fetch-registry: true
+        register-with-eureka: true
+        service-url:
+            defaultZone: http://eureka-server-vivo:abc123@eureka:8761/eureka/
+            instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+
+# Application Config
+spring:
+    application:
+        name: vivo-gateway
+    jmx:
+        enabled: false
+    cloud:
+        gateway:
+            dicovery:
+                locator:
+                    enabled: true
+                    lower-case-service-id: true
+            routes:
+                - id: ORDERS
+                  uri: lb://ORDERS/
+                  predicates:
+                  - Path=/orders/**
+                #===============================
+                - id: api-gateway
+                  uri: lb://api-gateway
+                  predicates:
+                  - Path=/v3/api-docs/**
+                  filters:
+                  - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+
+# Management
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+
+logging:
+    level:
+        org:
+            springframework:
+                cloud:
+                    gateway: TRACE
+                    http:
+                        server:
+                            reactive: DEBUG
+                    web:
+                        reactive: DEBUG
+        reactor:
+            ipc:
+                netty: DEBUG

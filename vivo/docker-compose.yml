@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  app:
+    build: ./Desafio-backend-Java/.
+    container_name: vivo-back
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+
+  eureka:
+    build: ./ORDERS-EUREKA-SERVER/.
+    container_name: vivo-eureka
+    ports:
+      - "8761:8761"
+    depends_on:
+      - rabbitmq
+
+  gateway:
+    build: ./ORDERS-GATEWAY/.
+    container_name: vivo-gateway
+    ports:
+      - "8765:8765"
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_PASSWORD=docker
+
